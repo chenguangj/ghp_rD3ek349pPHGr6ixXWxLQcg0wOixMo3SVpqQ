@@ -1,0 +1,759 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <title>场地信息</title>
+
+    <link href="../css/bootstrap.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.css" rel="stylesheet"/>
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <link href="../css/element/index.css" rel="stylesheet"/>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .table th, .table td {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div class="row">
+        <div class="col-md-12" style="height:60px;">
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="navbar-brand" style="width:100%; background-color: darkslateblue"><strong style="font-size: 20px;">体育场管理系统</strong></a>
+                    </div>
+                    <div class="col-md-10">
+
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li style="color: white">欢迎您，{{ user.name }}</li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user fa-fw"></i> 个人信息</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:void(0)" @click="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <nav id="nav-id" class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li>
+                            <a href="#"><i class="fa fa-sitemap"></i> 个人信息模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+								<li v-if="user.level == 1">
+									<a href="adminInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 1">
+									<a href="teacherInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">体育场管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 2">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">学生信息</span></a>
+								</li>
+                                <li v-if="user.level == 3">
+                                    <a href="playGroundReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="equipmentReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 2">
+                                    <a href="Notice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">公告模块</span></a>
+                                </li>
+                                <li v-if="user.level != 1">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">邮箱模块</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user"></i>个人信息</a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 场地模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="playGroundNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html" class="active-menu"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 器材模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="equipmentNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="equipment.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 赛事模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="gameNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="updatePassword.html"><i class="fa fa-unlock-alt"></i>修改密码</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" @click="logout"><i class="fa fa-power-off"></i>退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-10" style="background-color: #e6e6e6">
+            <div id="page-wrapper">
+                <div id="page-inner">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="page-header">
+                                <small>场地信息</small>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default" style="background-color: whitesmoke">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <div class="nx-table-header" v-if="user.level == 2">
+                                        <button class="btn btn-sm btn-primary" @click="add()">新增</button>
+                                    </div>
+                                    <span style="margin: 0 50px">
+                                        名称：<input type="text" placeholder="根据名称来进行搜索" style="margin-left: 20px;height: 32px" v-model="name">
+                                    </span>
+                                    <span style="margin: 0 50px">
+                                        类型：<input type="text" placeholder="根据类型来进行搜索" style="margin-left: 20px;height: 32px" v-model="type">
+                                    </span>
+                                    <div class=" form-inline" style="display: inline-block;margin: 0 50px">
+                                        月份：
+                                        <select class="form-control" v-model="mouth">
+                                            <option>0</option>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                        </select>
+                                    </div>
+                                    <div class=" form-inline" style="display: inline-block;margin: 0 50px">
+                                        日期：
+                                        <select class="form-control" v-model="day">
+                                            <option>0</option>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                            <option>24</option>
+                                            <option>25</option>
+                                            <option>26</option>
+                                            <option>27</option>
+                                            <option>28</option>
+                                            <option>29</option>
+                                            <option>30</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" @click="loadTable(1)" style="margin-left: 50px">查询</button>
+                                    <br>
+                                    <br>
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>名称</th>
+                                            <th>类型</th>
+                                            <th>每小时单价</th>
+                                            <th>月份</th>
+                                            <th>日期</th>
+                                            <th>开始时间</th>
+                                            <th>结束时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody v-for="obj in tableData">
+                                        <tr>
+                                            <td>{{ obj.name }}</td>
+                                            <td>{{ obj.type }}</td>
+                                            <td>{{ obj.money }}</td>
+                                            <td>{{ obj.mouth }}</td>
+                                            <td>{{ obj.day }}</td>
+                                            <td>{{ obj.initTime }}</td>
+                                            <td>{{ obj.destroyTime }}</td>
+                                            <td>{{ obj.state }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" @click="init(obj)" v-if="user.level == 2">编辑</button>
+                                                <button class="btn btn-sm btn-primary" @click="reservation(obj.id)" v-if="user.level == 3 & obj.reservation == -1">预约</button>
+                                                <button class="btn btn-sm btn-danger" @click="del(obj.id)" v-if="user.level == 2">删除</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item" v-bind:class="{ disabled: preActive }">
+                                                <a class="page-link" href="javascript:void(0)"
+                                                   v-on:click="loadTable(pageInfo.hasPreviousPage? (pageInfo.pageNum - 1) : pageInfo.pageNum)">上一页</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" v-if="pageInfo.pageNum > 1" v-on:click="loadTable(pageInfo.pageNum - 1)">{{pageInfo.pageNum - 1}}</a>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <a class="page-link" aria-disabled="true" href="javascript:void(0)">{{pageInfo.pageNum}}</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" v-if="pageInfo.hasNextPage" v-on:click="loadTable(pageInfo.pageNum + 1)">{{pageInfo.pageNum + 1}}</a>
+                                            </li>
+                                            <li class="page-item" v-bind:class="{ disabled: nextActive }">
+                                                <a class="page-link" href="javascript:void(0)" v-on:click="loadTable(pageInfo.hasNextPage? (pageInfo.pageNum + 1) : pageInfo.pageNum)">下一页</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal" tabindex="-1" role="dialog" id="mod">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">请填写信息</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="entity={sex:'男'}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="id" name="id" v-model="entity.id">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">名称</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.name" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类型</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.type" placeholder="请输入类型">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每小时单价</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.money" placeholder="请输入每小时单价">
+                            </div>
+                        </div>
+                        <div class="form-group" v-if="this.entity.reservation != -1">
+                            <label class="col-sm-3 control-label">预约的学生</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.reservationName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">月份</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="entity.mouth" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">日期</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="entity.day" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开始时间</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="entity.initTime" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">结束时间</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="entity.destroyTime" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="entity={}">关闭</button>
+                    <button type="button" class="btn btn-primary" v-on:click="submit()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.metisMenu.js"></script>
+<script src="../js/custom-scripts.js"></script>
+<script src="../js/my.js"></script>
+<script src="../js/vue2.6.11/vue.min.js"></script>
+<script src="../js/vue2.6.11/axios.js"></script>
+<script src="../js/element/index.js"></script>
+
+<script>
+    function msg(type, msg) {
+        Vue.prototype.$message({
+            type: type, // success（成功）、warning（警告）, error(错误)
+            message: msg,
+            duration: 2000,
+            offset: 100,
+            center: true
+        })
+    }
+
+    new Vue({
+        el: '#wrapper',
+        data: {
+            user: {},
+            entity: {},
+            tableData: [],
+            pageInfo: {},
+            preActive: false,
+            nextActive: false,
+            name: null,
+            type: null,
+            mouth: 0,
+            day: 0
+        },
+        created: function () {
+            const menuHeight = document.getElementById("main-menu").getElementsByTagName('li').length * 53;
+            const bodyHeight = document.getElementsByTagName("body")[0].clientHeight;
+            document.getElementById("nav-id").style.height = (menuHeight > bodyHeight ? menuHeight : bodyHeight) + 'px';
+            this.user = JSON.parse(localStorage.getItem('user'));
+
+            this.loadTable(1);
+
+        },
+        methods: {
+
+            add() {
+                this.entity = {};
+                $('#mod').modal("show");
+            },
+
+            submit() {
+                if (this.entity.id) {
+                    axios.put("/playGround" , this.entity).then(res => {
+                        if (res.data.code === '0'){
+                            $('#mod').modal("hide");
+                            msg("success" , "修改成功");
+                            this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else {
+                    let entity = JSON.parse(JSON.stringify(this.entity));
+                    axios.post("/playGround" , entity).then(res => {
+                        if (res.data.code === '0') {
+                            $('#mod').modal("hide");
+                            msg("success" , "新增成功");
+                            this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                }
+            },
+
+            init(obj) {
+                this.entity = JSON.parse(JSON.stringify(obj));
+                $('#mod').modal("show");
+            },
+
+            del(id) {
+                let _this = this;
+                this.$confirm('确认删除？' , '系统提示' , {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    cancelButtonClass: 'btn-custom-cancel',
+                    type: 'warning'
+                }).then(function(){
+                    axios.delete("/playGround/" + id).then(res => {
+                        if (res.data.code === '0'){
+                            msg("success" , "删除成功");
+                            _this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                }).catch(function(){
+                    console.log("取消成功！");
+                });
+            },
+
+
+            loadTable(pageNum) {
+                if (this.name && this.type && this.mouth!=0 && this.day!=0) {
+                    axios.get("/playGround/page1/" + this.name + "/" + this.type + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth + "&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.type && this.mouth!=0) {
+                    axios.get("/playGround/page2/" + this.name + "/" + this.type + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.type && this.day!=0) {
+                    axios.get("/playGround/page3/" + this.name + "/" + this.type + "?pageNum="+ pageNum + "&pageSize=5&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.mouth!=0 && this.day!=0) {
+                    axios.get("/playGround/page4/" + this.name + "?pageNum="+ pageNum + "&pageSize=5&mouth=" + this.mouth + "&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.day && this.type && this.mouth!=0) {
+                    axios.get("/playGround/page5/" + this.type + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth + "&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.type) {
+                    axios.get("/playGround/page6/" + this.name + "/" + this.type + "?pageNum="+ pageNum +"&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.mouth!=0) {
+                    axios.get("/playGround/page7/" + this.name + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name && this.day!=0) {
+                    axios.get("/playGround/page8/" + this.name + "?pageNum="+ pageNum +"&pageSize=5&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.type && this.mouth!=0) {
+                    axios.get("/playGround/page9/" + this.type + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.type && this.day!=0) {
+                    axios.get("/playGround/page10/" + this.type + "?pageNum="+ pageNum +"&pageSize=5&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.mouth!=0 && this.day!=0) {
+                    axios.get("/playGround/page11" + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth + "&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.name) {
+                    axios.get("/playGround/page12/" + this.name + "?pageNum="+ pageNum +"&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.type) {
+                    axios.get("/playGround/page13/" + this.type + "?pageNum="+ pageNum +"&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.mouth!=0) {
+                    axios.get("/playGround/page14" + "?pageNum="+ pageNum +"&pageSize=5&mouth=" + this.mouth).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else if (this.day!=0) {
+                    axios.get("/playGround/page15" + "?pageNum="+ pageNum +"&pageSize=5&day=" + this.day).then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else {
+                    axios.get("/playGround/page/?pageNum="+ pageNum +"&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                }
+            },
+
+
+            reservation(id) {
+                axios.delete("/playGround/reservation/" + id + "/" + this.user.id).then(res => {
+                    if (res.data.code === '0') {
+                        msg("success" , "预约成功");
+                        this.loadTable(1);
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            },
+
+            logout() {
+                axios.get("/logout").then(res => {
+                    if (res.data.code === '0') {
+                        window.location = "/end/page/login.html";
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

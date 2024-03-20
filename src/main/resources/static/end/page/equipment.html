@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <title>器材信息</title>
+
+    <link href="../css/bootstrap.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.css" rel="stylesheet"/>
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <link href="../css/element/index.css" rel="stylesheet"/>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .table th, .table td {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div class="row">
+        <div class="col-md-12" style="height:60px;">
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="navbar-brand" style="width:100%; background-color: darkslateblue"><strong style="font-size: 20px;">体育场管理系统</strong></a>
+                    </div>
+                    <div class="col-md-10">
+
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li style="color: white">欢迎您，{{ user.name }}</li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user fa-fw"></i> 个人信息</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:void(0)" @click="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <nav id="nav-id" class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li>
+                            <a href="#"><i class="fa fa-sitemap"></i> 个人信息模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+								<li v-if="user.level == 1">
+									<a href="adminInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 1">
+									<a href="teacherInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">体育场管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 2">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">学生信息</span></a>
+								</li>
+                                <li v-if="user.level == 3">
+                                    <a href="playGroundReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="equipmentReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 2">
+                                    <a href="Notice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">公告模块</span></a>
+                                </li>
+                                <li v-if="user.level != 1">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">邮箱模块</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user"></i>个人信息</a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 场地模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="playGroundNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html" class="active-menu"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 器材模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="equipmentNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="equipment.html" class="active-menu"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 赛事模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="gameNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="updatePassword.html"><i class="fa fa-unlock-alt"></i>修改密码</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" @click="logout"><i class="fa fa-power-off"></i>退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-10" style="background-color: #e6e6e6">
+            <div id="page-wrapper">
+                <div id="page-inner">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="page-header">
+                                <small>器材信息</small>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default" style="background-color: whitesmoke">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <div class="nx-table-header" v-if="user.level == 2">
+                                        <button class="btn btn-sm btn-primary" @click="add()">新增</button>
+                                    </div>
+                                    <span style="margin: 0 50px">
+                                        名称：<input type="text" placeholder="根据名称来进行搜索" style="margin-left: 20px;height: 32px" v-model="name">
+                                    </span>
+                                    <button class="btn btn-sm btn-primary" @click="loadTable(1)" style="margin-left: 50px">查询</button>
+                                    <br>
+                                    <br>
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>名称</th>
+                                            <th>容量</th>
+                                            <th>每小时单价</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody v-for="obj in tableData">
+                                        <tr>
+                                            <td>{{ obj.name }}</td>
+                                            <td>{{ obj.capacity }}</td>
+                                            <td>{{ obj.money }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" @click="init(obj)" v-if="user.level == 2">编辑</button>
+                                                <button class="btn btn-sm btn-primary" @click="reservation(obj)" v-if="user.level == 3 & obj.capacity != 0">预约</button>
+                                                <button class="btn btn-sm btn-danger" @click="del(obj.id)" v-if="user.level == 2">删除</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item" v-bind:class="{ disabled: preActive }">
+                                                <a class="page-link" href="javascript:void(0)"
+                                                   v-on:click="loadTable(pageInfo.hasPreviousPage? (pageInfo.pageNum - 1) : pageInfo.pageNum)">上一页</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" v-if="pageInfo.pageNum > 1" v-on:click="loadTable(pageInfo.pageNum - 1)">{{pageInfo.pageNum - 1}}</a>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <a class="page-link" aria-disabled="true" href="javascript:void(0)">{{pageInfo.pageNum}}</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" v-if="pageInfo.hasNextPage" v-on:click="loadTable(pageInfo.pageNum + 1)">{{pageInfo.pageNum + 1}}</a>
+                                            </li>
+                                            <li class="page-item" v-bind:class="{ disabled: nextActive }">
+                                                <a class="page-link" href="javascript:void(0)" v-on:click="loadTable(pageInfo.hasNextPage? (pageInfo.pageNum + 1) : pageInfo.pageNum)">下一页</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal" tabindex="-1" role="dialog" id="mod">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">请填写信息</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="entity={}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <input type="hidden" id="id" name="id" v-model="entity.id">
+                            <label class="col-sm-3 control-label">名称</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.name" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">容量</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.capacity" placeholder="请输入容量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每小时单价</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.money" placeholder="请输入每小时单价">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="entity={}">关闭</button>
+                    <button type="button" class="btn btn-primary" v-on:click="submit()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    模态框2-->
+    <div class="modal" tabindex="-1" role="dialog" id="mod2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">请填写信息</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="entity={}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">名称</label>
+                            <div class="col-sm-7">
+                                <input disabled type="text" style="width: 100%"  class="form-control" v-model="entity.name" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所需的个数</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="reservationRo" placeholder="请输入容量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每小时单价</label>
+                            <div class="col-sm-7">
+                                <input disabled type="text" style="width: 100%"  class="form-control" v-model="entity.money" placeholder="请输入每小时单价">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">月份</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="mouth" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">日期</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="day" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开始时间</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="initTime" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">结束时间</label>
+                            <div class="col-sm-7 form-inline">
+                                <select class="form-control" v-model="destroyTime" style="width: 100%">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="entity={}">关闭</button>
+                    <button type="button" class="btn btn-primary" v-on:click="reservationImpl(entity)">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.metisMenu.js"></script>
+<script src="../js/custom-scripts.js"></script>
+<script src="../js/my.js"></script>
+<script src="../js/vue2.6.11/vue.min.js"></script>
+<script src="../js/vue2.6.11/axios.js"></script>
+<script src="../js/element/index.js"></script>
+
+<script>
+    function msg(type, msg) {
+        Vue.prototype.$message({
+            type: type, // success（成功）、warning（警告）, error(错误)
+            message: msg,
+            duration: 2000,
+            offset: 100,
+            center: true
+        })
+    }
+
+    new Vue({
+        el: '#wrapper',
+        data: {
+            user: {},
+            entity: {},
+            tableData: [],
+            pageInfo: {},
+            preActive: false,
+            nextActive: false,
+            name: null,
+            mouth: null,
+            day: null,
+            initTime: null,
+            destroyTime: null,
+            reservationRo: null
+        },
+        created: function () {
+            const menuHeight = document.getElementById("main-menu").getElementsByTagName('li').length * 53;
+            const bodyHeight = document.getElementsByTagName("body")[0].clientHeight;
+            document.getElementById("nav-id").style.height = (menuHeight > bodyHeight ? menuHeight : bodyHeight) + 'px';
+            this.user = JSON.parse(localStorage.getItem('user'));
+
+            this.loadTable(1);
+
+        },
+        methods: {
+
+
+            reservationImpl(entity) {
+                // 由于input之中若是使用 RequestBody 来进行数据的传输，那要求只能有一个，不能多个使用RequestBody来进行传输，那我们就直接通过赋值的方式来进行传输，效果也是一样的
+                axios.put("/equipment/reservation/" + this.user.id + "?reservationRo=" + this.reservationRo + "&mouth=" + this.mouth + "&day=" + this.day  + "&initTime=" + this.initTime + "&destroyTime=" + this.destroyTime , entity).then(res => {
+                    if (res.data.code === '0') {
+                        $('#mod2').modal("hide");
+                        msg("success" , "预约成功");
+
+                        this.loadTable(1);
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            },
+
+            add() {
+                this.entity = {};
+                $('#mod').modal("show");
+            },
+
+            // 这个是给学生来预约的模态窗
+            reservation(obj) {
+                this.entity = JSON.parse(JSON.stringify(obj));
+                this.mouth = null;
+                this.day = null;
+                this.initTime = null;
+                this.destroyTime = null;
+                this.reservationRo = null;
+                $('#mod2').modal("show");
+            },
+
+            submit() {
+                if (this.entity.id) {
+                    axios.put("/equipment" , this.entity).then(res => {
+                        if (res.data.code === '0'){
+                            $('#mod').modal("hide");
+                            msg("success" , "修改成功");
+                            this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                } else {
+                    let entity = JSON.parse(JSON.stringify(this.entity));
+                    axios.post("/equipment" , entity).then(res => {
+                        if (res.data.code === '0') {
+                            $('#mod').modal("hide");
+                            msg("success" , "新增成功");
+                            this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                }
+            },
+
+            init(obj) {
+                this.entity = JSON.parse(JSON.stringify(obj));
+                $('#mod').modal("show");
+            },
+
+            del(id) {
+                let _this = this;
+                this.$confirm('确认删除？' , '系统提示' , {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    cancelButtonClass: 'btn-custom-cancel',
+                    type: 'warning'
+                }).then(function(){
+                    axios.delete("/equipment/" + id).then(res => {
+                        if (res.data.code === '0'){
+                            msg("success" , "删除成功");
+                            _this.loadTable(1);
+                        } else {
+                            msg("error" , res.data.msg);
+                        }
+                    })
+                }).catch(function(){
+                    console.log("取消成功！");
+                });
+            },
+
+
+            loadTable(pageNum) {
+                if (this.name != null) {
+                    axios.get("/equipment/page/" + this.name + "?pageNum=" + pageNum + "&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error", res.data.msg);
+                        }
+                    })
+                }else {
+                    axios.get("/equipment/page/?pageNum=" + pageNum + "&pageSize=5").then(res => {
+                        if (res.data.code === '0') {
+                            this.tableData = res.data.data.list;
+                            this.pageInfo = res.data.data;
+                            this.preActive = !(this.pageInfo.hasPreviousPage);
+                            this.nextActive = !(this.pageInfo.hasNextPage);
+                        } else {
+                            msg("error", res.data.msg);
+                        }
+                    })
+                }
+            },
+
+
+
+            logout() {
+                axios.get("/logout").then(res => {
+                    if (res.data.code === '0') {
+                        window.location = "/end/page/login.html";
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <title>个人中心的公告</title>
+
+    <link href="../css/bootstrap.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.css" rel="stylesheet"/>
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <link href="../css/element/index.css" rel="stylesheet"/>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .table th, .table td {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div class="row">
+        <div class="col-md-12" style="height:60px;">
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="navbar-brand" style="width:100%; background-color: darkslateblue"><strong style="font-size: 20px;">体育场管理系统</strong></a>
+                    </div>
+                    <div class="col-md-10">
+
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li style="color: white">欢迎您，{{ user.name }}</li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user fa-fw"></i> 个人信息</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:void(0)" @click="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <nav id="nav-id" class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li>
+                            <a href="#"><i class="fa fa-sitemap"></i> 个人信息模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+								<li v-if="user.level == 1">
+									<a href="adminInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 1">
+									<a href="teacherInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">体育场管理员信息</span></a>
+								</li>
+								<li v-if="user.level == 2">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">学生信息</span></a>
+								</li>
+                                <li v-if="user.level == 3">
+                                    <a href="playGroundReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="equipmentReservation.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 3">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息模块</span></a>
+                                </li>
+                                <li v-if="user.level == 2">
+                                    <a href="Notice.html" class="active-menu"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">公告模块</span></a>
+                                </li>
+                                <li v-if="user.level != 1">
+                                    <a href="studentInfo.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">邮箱模块</span></a>
+                                </li>
+
+
+                                <li>
+                                    <a href="javascript:void(0)" @click="personalPage"><i class="fa fa-user"></i>个人信息</a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 场地模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="playGroundNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">场地信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 器材模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="equipmentNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="equipment.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">器材信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li v-if="user.level != 1">
+                            <a href="#"><i class="fa fa-sitemap"></i> 赛事模块<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="gameNotice.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事公告</span></a>
+                                </li>
+                                <li>
+                                    <a href="playGround.html"><i class="fa fa-table sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">赛事信息</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="updatePassword.html"><i class="fa fa-unlock-alt"></i>修改密码</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" @click="logout"><i class="fa fa-power-off"></i>退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-10" style="background-color: #e6e6e6">
+            <div id="page-wrapper">
+                <div id="page-inner">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="page-header">
+                                <small>场地公告</small>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default" style="background-color: whitesmoke">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" style="font-size: 20px">
+                                        <thead>
+                                        <tr>
+                                            <th>关于什么的公告</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>场地</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" @click="init(1)">编辑</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>器材</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" @click="init(2)">编辑</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>赛事</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" @click="init(3)">编辑</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal" tabindex="-1" role="dialog" id="mod">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">请填写公告相关的信息</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="entity={}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="id" name="id" v-model="entity.id">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">标题</label>
+                            <div class="col-sm-7">
+                                <input type="text" style="width: 100%"  class="form-control" v-model="entity.title" placeholder="请输入标题">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">内容</label>
+                            <div class="col-sm-7">
+                                <textarea style="width: 100%;resize: vertical"  class="form-control" v-model="entity.content" placeholder="请输入内容"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="entity={}">关闭</button>
+                    <button type="button" class="btn btn-primary" v-on:click="submit()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.metisMenu.js"></script>
+<script src="../js/custom-scripts.js"></script>
+<script src="../js/my.js"></script>
+<script src="../js/vue2.6.11/vue.min.js"></script>
+<script src="../js/vue2.6.11/axios.js"></script>
+<script src="../js/element/index.js"></script>
+
+<script>
+    function msg(type, msg) {
+        Vue.prototype.$message({
+            type: type, // success（成功）、warning（警告）, error(错误)
+            message: msg,
+            duration: 2000,
+            offset: 100,
+            center: true
+        })
+    }
+
+    new Vue({
+        el: '#wrapper',
+        data: {
+            user: {},
+            entity: {},
+        },
+        created: function () {
+            const menuHeight = document.getElementById("main-menu").getElementsByTagName('li').length * 53;
+            const bodyHeight = document.getElementsByTagName("body")[0].clientHeight;
+            document.getElementById("nav-id").style.height = (menuHeight > bodyHeight ? menuHeight : bodyHeight) + 'px';
+            this.user = JSON.parse(localStorage.getItem('user'));
+        },
+        methods: {
+
+
+            init(id){
+                axios.get("/notice/playGround/" + id).then(res => {
+                    if (res.data.code === '0') {
+                        this.entity = res.data.data;
+                        $('#mod').modal("show");
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            },
+
+            submit(){
+                axios.put("/notice/update" , this.entity).then(res => {
+                    if (res.data.code === '0') {
+                        $('#mod').modal("hide");
+                        msg("success" , "编辑成功");
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            },
+
+
+            logout() {
+                axios.get("/logout").then(res => {
+                    if (res.data.code === '0') {
+                        window.location = "/end/page/login.html";
+                    } else {
+                        msg("error" , res.data.msg);
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>
